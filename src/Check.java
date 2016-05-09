@@ -171,9 +171,6 @@ public class Check {
     public List<String> detector(Map<String, Integer> capacity, Map<String, Map<String, Integer>> bookingInfo) throws ParseException{
         Date checkinDate = checkin;
         Date checkoutDate = checkout;
-        if (checkinDate == null || checkoutDate == null){
-            throw new IllegalArgumentException();
-        }
         List<String> availableHotels = new ArrayList<>();
         if (checkoutDate.before(checkinDate)){
             throw new IllegalArgumentException();
