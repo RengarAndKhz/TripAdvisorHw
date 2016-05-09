@@ -30,7 +30,7 @@ public class Check {
     private Date checkout;
     public final String dateFormat = "yyyy-MM-dd";
 
-    Check(String capacityFile, String bookingFile, String checkin, String checkout) {
+    Check(String capacityFile, String bookingFile, String checkin, String checkout){
         this.capacityFile = capacityFile;
         this.bookingFile = bookingFile;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
@@ -56,8 +56,6 @@ public class Check {
         String filename = capacityFile;
         Map<String, Integer> capacity = new HashMap<String, Integer>();
         List<HotelInfo> hotelInfos = new ArrayList<>();
-        //File file = new File(filename);
-
         BufferedReader reader = new BufferedReader(new FileReader(filename));
         String line;
         Scanner scanner;
@@ -173,6 +171,9 @@ public class Check {
     public List<String> detector(Map<String, Integer> capacity, Map<String, Map<String, Integer>> bookingInfo) throws ParseException{
         Date checkinDate = checkin;
         Date checkoutDate = checkout;
+        if (checkinDate == null || checkoutDate == null){
+            throw new IllegalArgumentException();
+        }
         List<String> availableHotels = new ArrayList<>();
         if (checkoutDate.before(checkinDate)){
             throw new IllegalArgumentException();
@@ -198,8 +199,9 @@ public class Check {
 
 
     public static void main(String[] args) throws ParseException {
-        Check check = new Check("test.csv", "book.csv", "2015-04-02", "2015-03-20");
+
         try {
+            Check check = new Check("test.csv", "book.csv", "2015-04-02", "2015--03");
             Map<String, Integer> capacity = check.scanCapacityFile();
             Map<String, Map<String, Integer>> bookingInfo = check.scanBookings();
             List<String> availableHotels = check.detector(capacity, bookingInfo);
@@ -207,7 +209,7 @@ public class Check {
                 System.out.println(hotelName);
             }
         } catch (IOException e) {
-            System.out.print("not found");
+            System.out.print("not found cvs file, check the address of them");
         }catch (IllegalArgumentException e){
             System.out.println("Check out date should be after check in date");
         }
